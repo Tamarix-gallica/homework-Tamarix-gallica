@@ -28,8 +28,9 @@ def poland_cases_by_date(day: int, month: int, year: int = 2020) -> int:
     :return: Number of cases on a given date as an integer
     """
     
-    # Your code goes here (remove pass)
-    pass
+    data_pl = str(month) +"/"+ str(day) + "/" + str(year)[2::]
+    #print(data_pl)
+    return confirmed_cases.loc[confirmed_cases["Country/Region"]=="Poland", data_pl].values[0]
 
 
 def top5_countries_by_date(day: int, month: int, year: int = 2020) -> List[str]:
@@ -48,8 +49,13 @@ def top5_countries_by_date(day: int, month: int, year: int = 2020) -> List[str]:
     :return: A list of strings with the names of the coutires
     """
 
-    # Your code goes here (remove pass)
-    pass
+    data_w = str(month) +"/"+ str(day) + "/" + str(year)[2::]
+    #print(data_w)
+    #cc_sum = confirmed_cases.loc[confirmed_cases["Country/Region"]=="China"].sum()[2::]
+    #print(cc_sum)
+    cc_sorted = confirmed_cases[["Province/State", "Country/Region", data_w]].sort_values(by=data_w, ascending=False).head(5)
+    #print(cc_sorted)
+    return cc_sorted["Country/Region"].values
 
 
 def no_new_cases_count(day: int, month: int, year: int = 2020) -> int:
@@ -68,5 +74,5 @@ def no_new_cases_count(day: int, month: int, year: int = 2020) -> int:
     :return: Number of countries/regions where the count has not changed in a day
     """
     
-    # Your code goes here (remove pass)
-    pass
+    data_w = str(month) +"/"+ str(day) + "/" + str(year)[2::]
+    return confirmed_cases.loc[confirmed_cases[data_w]==0, :].count()[1]
