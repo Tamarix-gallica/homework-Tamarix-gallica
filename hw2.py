@@ -39,9 +39,15 @@ def countries_with_no_deaths_count(date: datetime.date) -> int:
     :param date: Date object of the date to get the results for
     :return: Number of countries with no deaths but with active cases on a given date as an integer
     """
-    
-    # Your code goes here
-    pass
+    date2 = format_date(date)
+    #print(dfD[["Province/State", "Country/Region", date2]].loc[dfD[date2]==0].count())
+    noD_all = dfD[date2].loc[dfD[date2]==0].count()
+    #print(noD_all)
+    no_active_cases = dfC[date2].loc[dfC[date2]==0].count()
+    #print('no active cases: ', no_active_cases)
+    noD = noD_all - no_active_cases
+    #print("no deaths: ", noD)
+    return noD
 
 
 def more_cured_than_deaths_indices(date: datetime.date) -> List[int]:
@@ -65,5 +71,18 @@ def more_cured_than_deaths_indices(date: datetime.date) -> List[int]:
     :return: A List of integers containing indices of countries which had more cured cases than deaths on a given date
     """
     
-    # Your code goes here
-    pass
+    date2 = format_date(date)
+    nD = dfD[["Province/State", "Country/Region", date2]]
+    #print(nD)
+    nR = dfR[["Province/State", "Country/Region", date2]]
+    #print(nR)
+    razem = nD.merge(nR, right_index=True, left_index=True)
+    # _x -> nD;  _y -> nR
+    col1_name = str(date2)+"_x"
+    col2_name = str(date2)+"_y"
+    list_more = []
+    for a, b in razem.iterrows():
+      #print("a: ", a, "b: ", b)
+      if b[col2_name] > b[col1_name]:
+            list_more.append(a)
+    return list_more
